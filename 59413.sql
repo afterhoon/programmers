@@ -1,0 +1,16 @@
+-- 입양 시각 구하기(2)
+-- https://programmers.co.kr/learn/courses/30/lessons/59413
+
+SELECT B.HOUR, NVL(COUNT, 0)
+FROM (
+    SELECT TO_NUMBER(TO_CHAR(DATETIME, 'hh24')) HOUR, COUNT(*) COUNT
+    FROM ANIMAL_OUTS
+    GROUP BY TO_NUMBER(TO_CHAR(DATETIME, 'hh24'))
+) A, (
+    SELECT ROWNUM-1 HOUR
+    FROM DUAL
+    CONNECT BY LEVEL <= 24
+) B
+WHERE A.HOUR(+) = B.HOUR
+ORDER BY B.HOUR;
+
